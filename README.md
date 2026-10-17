@@ -19,7 +19,7 @@ Run the official [Feishu/Lark CLI](https://github.com/larksuite/cli) (`lark-cli`
 - Streamable HTTP with a required bearer token (32+ characters, compared in constant time).
 - A container that runs as a non-root user with a read-only root filesystem, no capabilities and `no-new-privileges`. `lark-cli` is downloaded from the official release and checked against a pinned SHA-256.
 
-What the agent can do is still bounded by the scopes you grant the Feishu app and the user who logs in. Grant the least you need.
+What the agent can do is still bounded by the scopes you grant the Feishu app and the user who logs in. Grant the least you need. See [SECURITY.md](SECURITY.md) for the threat model.
 
 ## Quick start
 

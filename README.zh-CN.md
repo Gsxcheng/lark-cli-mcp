@@ -19,7 +19,7 @@
 - Streamable HTTP，必须带 Bearer 令牌（至少 32 位，常数时间比较）。
 - 容器以非 root 用户运行，根文件系统只读，去掉全部 capabilities，开启 `no-new-privileges`。`lark-cli` 从官方发布下载，并按固定的 SHA-256 校验。
 
-AI 能做什么，最终仍受你给飞书应用开的权限和登录账号的权限限制，按最小够用来开。
+AI 能做什么，最终仍受你给飞书应用开的权限和登录账号的权限限制，按最小够用来开。威胁模型见 [SECURITY.md](SECURITY.md)。
 
 ## 快速开始
 
