@@ -19,7 +19,7 @@ Run the official [Feishu/Lark CLI](https://github.com/larksuite/cli) (`lark-cli`
 - Streamable HTTP with a required bearer token (32+ characters, compared in constant time).
 - A container that runs as a non-root user with a read-only root filesystem, no capabilities and `no-new-privileges`. `lark-cli` is downloaded from the official release and checked against a pinned SHA-256.
 
-What the agent can do is still bounded by the scopes you grant the Feishu app and the user who logs in. Grant the least you need. You can also open the MCP layer up (`LARK_CLI_ALLOWED_DOMAINS=*`) and control everything with Feishu scopes; `config`/`profile`/`update`, `auth login/logout` and `@file` stay refused either way. See [docs/architecture.md](docs/architecture.md) for the design and the four permission layers, and [SECURITY.md](SECURITY.md) for the threat model.
+What the agent can do is still bounded by the scopes you grant the Feishu app and the user who logs in. Grant the least you need. You can also open the MCP layer up (`LARK_CLI_ALLOWED_DOMAINS=*`) and control everything with Feishu scopes; `config`/`profile`/`update`, `auth login/logout` and `@file` stay refused either way. Ready-made scope lists for the Feishu console's bulk import are in [feishu-scopes/](feishu-scopes/). See [docs/architecture.md](docs/architecture.md) for the design and the four permission layers, and [SECURITY.md](SECURITY.md) for the threat model.
 
 ## Quick start
 

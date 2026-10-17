@@ -86,6 +86,7 @@ In both modes three things are **always refused**, because Feishu's scopes can't
 - Watch out for broad "manage everything" scopes such as `drive:drive`, `docs:doc`, `bitable:app`. Many APIs accept any one of several scopes, and a broad scope is usually in that list. If you rely on fine-grained scopes, leave the broad ones off.
 - For a custom enterprise app, scope changes take effect only after you publish a new version.
 - With a user identity, effective scopes = scopes enabled on the app ∩ scopes the user consented to. `auth login` with no flags asks for every business scope the app has; narrow it with `--domain` or drop some with `--exclude <scope>`.
+- Ready-made lists for the console's bulk import (with and without delete scopes) are in [feishu-scopes/](../feishu-scopes/).
 - The AI can call `lark_cli(["auth","scopes"])` at any time to show what it actually holds.
 
 ### Layer 4: whose identity
