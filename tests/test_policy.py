@@ -20,8 +20,8 @@ def test_allowed(args):
 
 @pytest.mark.parametrize("args, reason", [
     ([], "empty"),
-    (["config", "show"], "domain 'config'"),
-    (["update"], "domain 'update'"),
+    (["config", "show"], "operator"),
+    (["update"], "operator"),
     (["im", "+messages-send"], "domain 'im'"),
     (["auth", "login"], "auth"),
     (["auth"], "auth"),
@@ -59,3 +59,9 @@ def test_wildcard_domains_keep_operator_commands_out():
     assert "login" in p.refuse(["auth", "login"])
     assert p.refuse(["docs", "x", "--yes"]) is not None
     assert p.refuse(["docs", "--content", "@/data/x"]) is not None
+
+
+def test_operator_commands_refused_even_when_listed():
+    p = Policy.from_env({"LARK_CLI_ALLOWED_DOMAINS": "config,profile,update,docs"})
+    for head in ("config", "profile", "update"):
+        assert "operator" in p.refuse([head, "show"])

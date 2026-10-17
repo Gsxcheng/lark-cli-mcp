@@ -19,7 +19,7 @@
 - Streamable HTTP，必须带 Bearer 令牌（至少 32 位，常数时间比较）。
 - 容器以非 root 用户运行，根文件系统只读，去掉全部 capabilities，开启 `no-new-privileges`。`lark-cli` 从官方发布下载，并按固定的 SHA-256 校验。
 
-AI 能做什么，最终仍受你给飞书应用开的权限和登录账号的权限限制，按最小够用来开。威胁模型见 [SECURITY.md](SECURITY.md)。
+AI 能做什么，最终仍受你给飞书应用开的权限和登录账号的权限限制，按最小够用来开。也可以把 MCP 这层放开（`LARK_CLI_ALLOWED_DOMAINS=*` 等），全部交给飞书开放平台的权限来管；不管哪种，`config`/`profile`/`update`、`auth login/logout` 和 `@文件` 都始终拒绝。设计思路和四层权限见 [docs/architecture.zh-CN.md](docs/architecture.zh-CN.md)，威胁模型见 [SECURITY.md](SECURITY.md)。
 
 ## 快速开始
 

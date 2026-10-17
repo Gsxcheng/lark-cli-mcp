@@ -6,9 +6,11 @@ lark-cli-mcp assumes the MCP client (an AI agent) may be confused or prompt-inje
 
 - No shell: argv goes straight to `subprocess.run`, so shell syntax in arguments or stdin is inert text.
 - No account or app changes: `config`, `update`, `profile` and `auth login/logout` are refused.
-- No high-risk writes: arguments carrying `--yes` are refused.
+- No high-risk writes by default: arguments carrying `--yes` are refused unless `LARK_CLI_ALLOW_YES` is on.
 - No local file reads: `@file` arguments are refused, so container files (including lark-cli's own config) cannot be pulled into a document.
-- Raw `api` calls are GET-only.
+- Raw `api` calls are GET-only unless `LARK_CLI_ALLOW_API_WRITE` is on.
+
+The last two, and the domain list, can be opened up so that Feishu scopes do all the limiting; see [docs/architecture.md](docs/architecture.md). The first four always hold.
 - Every HTTP request needs the bearer token; the container runs as a non-root user with a read-only root filesystem and no capabilities.
 
 ## What it does not protect against
