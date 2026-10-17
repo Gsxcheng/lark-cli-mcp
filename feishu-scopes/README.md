@@ -21,7 +21,7 @@ Recommended start: `docs-no-delete.json`. 推荐先用它：能建、改、分�
 - `offline_access` is included because lark-cli adds it to every login to refresh the token. 含 `offline_access`，lark-cli 每次登录都会申请它，用于刷新令牌。
 - At login you can still narrow further: `lark-cli auth login --domain docs,drive` or `--exclude <scope>`. Effective scopes = enabled on the app ∩ consented at login. 登录时还能再收窄；实际权限 = 应用开通的 ∩ 登录时同意的。
 - **Format.** The files use `{"scopes": {"tenant": [...], "user": [...]}}`, the same shape the console's export produces (checked against a real export on 2026-10-17). 格式与飞书后台「导出」的结构一致（2026-10-17 用真实导出核对过）。
-- **Keep your existing tenant scopes.** The templates leave `tenant` empty. If something else already uses the app identity, export first and paste your current `tenant` list into the template before importing, so nothing it relies on gets lost. Whether import adds to or replaces the current list is not verified; after importing, close any scope you don't want (including leftover `delete` ones) with 关闭 or 批量关闭权限. 模板的 `tenant` 是空的；如果应用身份还有别的程序在用，导入前先导出，把现有 `tenant` 列表粘进模板。导入是追加还是覆盖未实测，导入后把不要的权限（包括残留的删除权限）手动关闭。
+- **Keep your existing tenant scopes.** The templates leave `tenant` empty. If something else already uses the app identity, export first and paste your current `tenant` list into the template before importing, so nothing it relies on gets lost. Import only adds: the confirm dialog lists the new scopes and skips ones already enabled, and nothing is removed (seen 2026-10-17). So after importing, close any scope you don't want, including leftover `delete` ones, with 关闭 or 批量关闭权限. 模板的 `tenant` 是空的；如果应用身份还有别的程序在用，导入前先导出，把现有 `tenant` 列表粘进模板。导入只会追加：确认框列出新增的权限，已开通的跳过，不会关掉任何权限（2026-10-17 实测）。所以导入后要把不要的权限（包括残留的删除权限）手动关闭。
 
 ## Regenerate / 重新生成
 
