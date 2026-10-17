@@ -1,0 +1,21 @@
+services:
+  lark-cli-mcp:
+    build: ..
+    image: lark-cli-mcp:latest
+    container_name: lark-cli-mcp
+    restart: unless-stopped
+    env_file: ../.env
+    ports:
+      - "127.0.0.1:3310:3000"   # loopback only; put a reverse proxy or tunnel in front
+    volumes:
+      - lark-cli-data:/data       # lark-cli config and tokens
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 128
+volumes:
+  lark-cli-data:
