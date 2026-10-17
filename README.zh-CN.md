@@ -11,7 +11,7 @@
 - 只有一个工具 `lark_cli(args, stdin)`。`args` 是 `lark-cli` 后面的参数列表；`stdin` 给支持 `-` 的参数传内容，带表格、引用、`<标签>` 的 Markdown 原样传入。
 - 全程不经过 shell。参数列表直接交给 `subprocess.run`，`&&`、`$(...)`、反引号都只是普通文字。
 - 默认开启的拒绝规则：
-  - 只放行列出的业务域（docs、drive、markdown、wiki、base、sheets、contact，以及 schema、skills、doctor、help）；
+  - 只放行列出的业务域（docs、drive、markdown、wiki、base、sheets、contact，以及 schema、skills、doctor、help、whoami；`LARK_CLI_ALLOWED_DOMAINS=*` 时放行除 config、profile、update 以外的所有域）；
   - 拒绝 `config`、`update`、`profile`、`auth login/logout`，AI 改不了用哪个应用、哪个账号；
   - 拒绝 `--yes`（飞书 CLI 对高危写操作的确认标记）；
   - 拒绝 `@文件` 参数，AI 没法把容器里的文件读进文档；

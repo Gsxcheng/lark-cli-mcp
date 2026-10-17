@@ -8,8 +8,10 @@ from dataclasses import dataclass, field
 
 DEFAULT_DOMAINS = (
     "docs,drive,markdown,wiki,base,sheets,contact,"
-    "schema,skills,auth,doctor,api,help"
+    "schema,skills,auth,doctor,api,help,whoami"
 )
+# CLI management stays with the server operator even when domains is "*".
+OPERATOR_ONLY = frozenset({"config", "profile", "update"})
 # Read-only auth subcommands. login / logout stay with whoever runs the server.
 AUTH_READ_ONLY = frozenset({"status", "scopes", "check", "list"})
 TOP_LEVEL_INFO = frozenset({"--version", "--help", "-h"})
@@ -44,7 +46,9 @@ class Policy:
         head = args[0]
         if head in TOP_LEVEL_INFO and len(args) == 1:
             return None
-        if head not in self.domains:
+        if head in OPERATOR_ONLY and "*" in self.domains:
+            return f"'{head}' is CLI management and is done by the server operator"
+        if head not in self.domains and "*" not in self.domains:
             return f"domain '{head}' is not allowed here; allowed: {', '.join(sorted(self.domains))}"
         if head == "auth" and (len(args) < 2 or args[1] not in AUTH_READ_ONLY):
             return "only 'auth " + "/".join(sorted(AUTH_READ_ONLY)) + "' are allowed; login is done by the server operator"

@@ -11,7 +11,7 @@ Run the official [Feishu/Lark CLI](https://github.com/larksuite/cli) (`lark-cli`
 - One tool, `lark_cli(args, stdin)`. `args` is the argv after `lark-cli`; `stdin` feeds flags that accept `-`, so Markdown with tables, quotes and `<tags>` goes through untouched.
 - No shell anywhere. The argv list goes straight to `subprocess.run`; `&&`, `$(...)` and backticks are just text.
 - A refusal policy, on by default:
-  - only the listed domains run (docs, drive, markdown, wiki, base, sheets, contact, plus schema, skills, doctor, help);
+  - only the listed domains run (docs, drive, markdown, wiki, base, sheets, contact, plus schema, skills, doctor, help, whoami);
   - `config`, `update`, `profile` and `auth login/logout` are refused, so the agent cannot change which app or account it acts as;
   - `--yes` (lark-cli's marker for high-risk writes) is refused;
   - `@file` arguments are refused, so the agent cannot read files from the container into a document;
@@ -64,7 +64,7 @@ The tool returns `exit=<code>`, then stdout and stderr. Refused calls return `RE
 | `MCP_BEARER_TOKEN` | required | Clients send `Authorization: Bearer <token>`. At least 32 characters. |
 | `MCP_ALLOWED_HOSTS` | empty | Comma-separated Host values to accept. Empty turns DNS-rebinding protection off, which is what you want behind a proxy that rewrites nothing. |
 | `MCP_PATH` | `/mcp` | HTTP path of the MCP endpoint. |
-| `LARK_CLI_ALLOWED_DOMAINS` | see above | Comma-separated first arguments that may run. |
+| `LARK_CLI_ALLOWED_DOMAINS` | see above | Comma-separated first arguments that may run. `*` allows every domain except `config`, `profile` and `update`, which stay with the operator, so the Feishu app's scopes become the limit. |
 | `LARK_CLI_ALLOW_YES` | off | Allow `--yes` high-risk writes. |
 | `LARK_CLI_ALLOW_FILE_ARGS` | off | Allow `@file` arguments. |
 | `LARK_CLI_ALLOW_API_WRITE` | off | Allow non-GET raw `api` calls. |

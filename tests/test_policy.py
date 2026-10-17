@@ -48,3 +48,14 @@ def test_env_overrides():
     assert p.refuse(["drive", "--help"]) is not None
     assert p.refuse(["docs", "x", "--yes"]) is None
     assert p.refuse(["api", "POST", "/x"]) is not None  # api not in the domain list
+
+
+def test_wildcard_domains_keep_operator_commands_out():
+    p = Policy.from_env({"LARK_CLI_ALLOWED_DOMAINS": "*"})
+    assert p.refuse(["im", "+messages-send"]) is None
+    assert p.refuse(["calendar", "+agenda"]) is None
+    for head in ("config", "profile", "update"):
+        assert "operator" in p.refuse([head, "show"])
+    assert "login" in p.refuse(["auth", "login"])
+    assert p.refuse(["docs", "x", "--yes"]) is not None
+    assert p.refuse(["docs", "--content", "@/data/x"]) is not None
