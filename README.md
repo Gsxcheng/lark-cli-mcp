@@ -23,12 +23,36 @@ What the agent can do is still bounded by the scopes you grant the Feishu app an
 
 ## Quick start
 
+### Option 1: let an AI agent deploy it
+
+Open an agent that can run commands on the server (Claude Code, Codex CLI, …) and paste this:
+
+```text
+Deploy lark-cli-mcp (https://github.com/Gsxcheng/lark-cli-mcp) on this server so the official Feishu/Lark CLI runs as an MCP server. Requirements:
+
+1. Check that docker, docker compose, git and openssl are available. If something is missing, tell me; don't install system packages yourself.
+2. git clone into /opt/lark-cli-mcp (git pull if it exists). Copy .env.example to .env, chmod 600, and write a MCP_BEARER_TOKEN generated with `openssl rand -hex 32`. Never print the token's value.
+3. If the server is in mainland China, build with --build-arg LARK_CLI_PREFER_MIRROR=1 --build-arg PIP_INDEX_URL=https://mirrors.cloud.tencent.com/pypi/simple.
+4. Run `docker compose -f deploy/docker-compose.yml up -d --build`, then check that `curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3310/mcp` returns 401 (running, token required).
+5. Feishu authorization must be done by me in a browser; you only pass me the links:
+   - run `docker exec lark-cli-mcp lark-cli config init --new` in the background, send me the link from its output, and wait until I say it's done;
+   - run `docker exec lark-cli-mcp lark-cli auth login --no-wait --json`, send me the verification link; after I confirm, finish with `docker exec lark-cli-mcp lark-cli auth login --device-code <device_code>`.
+6. Run `docker exec lark-cli-mcp lark-cli auth status` and show me the result.
+7. Finally tell me: the endpoint http://127.0.0.1:3310/mcp, that the token is MCP_BEARER_TOKEN in /opt/lark-cli-mcp/.env (location only, not the value), and that it needs a reverse proxy or tunnel before it is reachable from outside.
+
+Don't change anything in .env besides MCP_BEARER_TOKEN, don't expose port 3310 to the internet, and don't run any lark-cli config or auth command other than the ones listed above.
+```
+
+To let Feishu scopes do all the limiting afterwards, add `LARK_CLI_ALLOWED_DOMAINS=*` and the other switches to `.env` (see [Configuration](#configuration) and [the design notes](docs/architecture.md)); ready-made scope lists for the Feishu console are in [feishu-scopes/](feishu-scopes/).
+
+### Option 2: by hand
+
 ```bash
 git clone https://github.com/Gsxcheng/lark-cli-mcp && cd lark-cli-mcp
 cp .env.example .env && sed -i "s/^MCP_BEARER_TOKEN=.*/MCP_BEARER_TOKEN=$(openssl rand -hex 32)/" .env
 docker compose -f deploy/docker-compose.yml up -d --build
 
-# One-time setup, done by you, not by the agent:
+# One-time setup; you consent in a browser:
 docker exec -it lark-cli-mcp lark-cli config init --new          # create or bind a Feishu app in the browser
 docker exec -it lark-cli-mcp lark-cli auth login --domain docs,drive,markdown,wiki,base,sheets,contact
 docker exec lark-cli-mcp lark-cli auth status
@@ -44,6 +68,21 @@ From mainland China, build with mirrors:
 docker compose -f deploy/docker-compose.yml build \
   --build-arg LARK_CLI_PREFER_MIRROR=1 \
   --build-arg PIP_INDEX_URL=https://mirrors.cloud.tencent.com/pypi/simple
+```
+
+### Teach your AI to use it
+
+Once connected, add this to your AI client's project instructions or system prompt:
+
+```text
+You can operate Feishu/Lark with the lark_cli tool. args is the argv after lark-cli; stdin feeds flags given as `-`.
+- Look before you call: `["<domain>", "--help"]` lists commands, `["schema", "<service.resource.method>"]` shows parameters and required scopes. Prefer +shortcut commands.
+- Act as me by default: add `--as user`.
+- Put document bodies in stdin with `--content -`; Markdown tables and quotes pass through unchanged.
+- Add `--dry-run` to preview when you're unsure what a write will do.
+- Ask me before deleting, removing collaborators, transferring ownership, or anything that needs `--yes`.
+- REFUSED means a server-side rule blocked the call (config, auth login, @file, …). Don't work around it; tell me.
+- On a missing-scope error, tell me the scope name; I'll enable it in the Feishu Open Platform.
 ```
 
 ## Example call
