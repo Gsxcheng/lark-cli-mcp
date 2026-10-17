@@ -2,7 +2,7 @@
 
 Ready-made scope lists for the Feishu Open Platform's **批量导入/导出权限** (bulk import/export scopes), built from what `lark-cli` 1.0.98 asks for at `auth login`.
 
-开放平台 → 你的应用 → 开发配置 → 权限管理 → 批量处理 → 批量导入/导出权限，把下面某个文件的内容粘进去，导入后到「版本管理与发布」发布新版本才生效。
+开放平台 → 你的应用 → 开发配置 → 权限管理 → 批量处理 → 批量导入/导出权限，把下面某个文件的内容粘进去，确认后点「申请开通」。免审权限开通即生效（页面顶部显示「当前修改均已发布」）；需要审核的权限要到「版本管理与发布」发布新版本、管理员通过后才生效。
 
 | File / 文件 | Domains / 包含 | Delete scopes / 删除权限 | User scopes / 数量 |
 | --- | --- | --- | --- |

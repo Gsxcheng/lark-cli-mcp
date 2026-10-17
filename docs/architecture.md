@@ -69,7 +69,7 @@ LARK_CLI_ALLOW_YES=1
 LARK_CLI_ALLOW_API_WRITE=1
 ```
 
-The MCP layer opens up and all permission decisions live in the Feishu Open Platform: one place to maintain, effective as soon as you publish, no server change.
+The MCP layer opens up and all permission decisions live in the Feishu Open Platform: one place to maintain, effective right away for scopes that need no review, no server change.
 
 In both modes three things are **always refused**, because Feishu's scopes can't control them:
 
@@ -84,7 +84,7 @@ In both modes three things are **always refused**, because Feishu's scopes can't
 - Feishu scopes are fine-grained and deletion is its own scope, e.g. `space:document:delete` (Drive files), `base:record:delete`, `base:table:delete`, `base:field:delete`. Turn these off if the AI should never delete.
 - `lark-cli` shortcuts check the fine-grained scopes; deleting a Drive file needs `space:document:delete`.
 - Watch out for broad "manage everything" scopes such as `drive:drive`, `docs:doc`, `bitable:app`. Many APIs accept any one of several scopes, and a broad scope is usually in that list. If you rely on fine-grained scopes, leave the broad ones off.
-- For a custom enterprise app, scope changes take effect only after you publish a new version.
+- Scopes that need no review (免审权限) take effect as soon as you enable or close them; the console then shows 「当前修改均已发布」. Scopes that need review take effect only after you publish a new version and an admin approves it.
 - With a user identity, effective scopes = scopes enabled on the app ∩ scopes the user consented to. `auth login` with no flags asks for every business scope the app has; narrow it with `--domain` or drop some with `--exclude <scope>`.
 - Ready-made lists for the console's bulk import (with and without delete scopes) are in [feishu-scopes/](../feishu-scopes/).
 - The AI can call `lark_cli(["auth","scopes"])` at any time to show what it actually holds.
