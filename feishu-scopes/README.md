@@ -20,7 +20,8 @@ Recommended start: `docs-no-delete.json`. 推荐先用它：能建、改、分�
 - **Don't add broad scopes** such as `drive:drive`, `docs:doc`, `bitable:app`. Many APIs accept any one of several scopes, so a broad scope re-enables what you left out. 不要另外开「管理全部」类的大权限，否则会绕过上面的细分控制。
 - `offline_access` is included because lark-cli adds it to every login to refresh the token. 含 `offline_access`，lark-cli 每次登录都会申请它，用于刷新令牌。
 - At login you can still narrow further: `lark-cli auth login --domain docs,drive` or `--exclude <scope>`. Effective scopes = enabled on the app ∩ consented at login. 登录时还能再收窄；实际权限 = 应用开通的 ∩ 登录时同意的。
-- **Import format is UNVERIFIED.** The files use `{"scopes": {"tenant": [...], "user": [...]}}`. If the console rejects it, export your current scopes once and compare. 导入格式尚未实测；如果导入报错，请先导出一次现有权限对照格式。
+- **Format.** The files use `{"scopes": {"tenant": [...], "user": [...]}}`, the same shape the console's export produces (checked against a real export on 2026-10-17). 格式与飞书后台「导出」的结构一致（2026-10-17 用真实导出核对过）。
+- **Keep your existing tenant scopes.** The templates leave `tenant` empty. If something else already uses the app identity, export first and paste your current `tenant` list into the template before importing, so nothing it relies on gets lost. Whether import adds to or replaces the current list is not verified; after importing, close any scope you don't want (including leftover `delete` ones) with 关闭 or 批量关闭权限. 模板的 `tenant` 是空的；如果应用身份还有别的程序在用，导入前先导出，把现有 `tenant` 列表粘进模板。导入是追加还是覆盖未实测，导入后把不要的权限（包括残留的删除权限）手动关闭。
 
 ## Regenerate / 重新生成
 
